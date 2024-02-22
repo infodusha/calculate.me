@@ -42,36 +42,46 @@
     <script>
       // Mathematical operations block
 
+      let highPriorityOperators = [`/`, `*`];
+      let lowPriorityOperators = [`-`, `+`];
+
       let add = function (num1, num2) {
         let result = parseInt(num1) + parseInt(num2);
-        console.log(result);
+        return result;
       };
 
       let subtract = function (num1, num2) {
         let result = parseInt(num1) - parseInt(num2);
-        console.log(result);
+        return result;
       };
 
       let multiply = function (num1, num2) {
         let result = parseInt(num1) * parseInt(num2);
-        console.log(result);
+        return result;
       };
 
       let divide = function (num1, num2) {
         let result = parseInt(num1) / parseInt(num2);
-        console.log(result);
+        return result;
       };
 
       let operate = function (arr) {
         if (arr.includes(`+`)) {
-          add(arr[0], arr[2]);
+          return add(arr[0], arr[2]);
         } else if (arr.includes(`-`)) {
-          subtract(arr[0], arr[2]);
+          return subtract(arr[0], arr[2]);
         } else if (arr.includes(`*`)) {
-          multiply(arr[0], arr[2]);
+          return multiply(arr[0], arr[2]);
         } else if (arr.includes(`/`)) {
-          divide(arr[0], arr[2]);
+          return divide(arr[0], arr[2]);
         }
+      };
+
+      let countDivisionAndMultiply = function (arr) {
+        let countOfDivision = arr.filter((item) => item == `/`).length;
+        let countOfMultiply = arr.filter((item) => item == `*`).length;
+        let count = countOfDivision + countOfMultiply;
+        return count;
       };
 
       // Whatever else that's required in my project block
@@ -96,7 +106,29 @@
       let equality_operator = document.querySelector(".equality_operator");
       equality_operator.addEventListener("click", function () {
         let user_input = displayOperation.value.toString().split(/([+-/*])/);
-        operate(user_input);
+        console.log(user_input);
+        if (
+          lowPriorityOperators.some((item) => user_input.includes(item)) &&
+          highPriorityOperators.some((item) => user_input.includes(item))
+        ) {
+          for (let i = countDivisionAndMultiply(user_input); i > 0; i--) {
+            if (user_input.includes(`/`)) {
+              let indexOfDivision = user_input.indexOf("/");
+              let portionOfExpression = user_input.splice(
+                indexOfDivision - 1,
+                3
+              );
+              console.log(portionOfExpression);
+              let resultOfPortion = operate(portionOfExpression);
+              user_input.splice(indexOfDivision - 1, 0, resultOfPortion);
+              console.log(user_input);
+            }
+            // if (user_input[i] == `/` || user_input[i] == `*`) {
+            //   let portionOfExpression = user_input.splice(indexOf(), 3);
+            //   console.log(portionOfExpression);
+            // }
+          }
+        }
       });
     </script>
   </body>
