@@ -84,6 +84,13 @@
         return count;
       };
 
+      let countSumAndSubtraction = function (arr) {
+        let countOfSum = arr.filter((item) => item == `+`).length;
+        let countOfSubtraction = arr.filter((item) => item == `-`).length;
+        let count = countOfSum + countOfSubtraction;
+        return count;
+      };
+
       // Whatever else that's required in my project block
 
       let clear_button = document.querySelector(".clear_button");
@@ -103,6 +110,47 @@
           displayOperation.value += this.textContent;
         });
       }
+
+      let operateMultipleHighPriorityOperators = function (arr) {
+        for (let i = countDivisionAndMultiply(arr); i > 0; i--) {
+          if (arr.includes(`/`)) {
+            let indexOfOperation = arr.indexOf("/");
+            let portionOfExpression = arr.splice(indexOfOperation - 1, 3);
+            console.log(portionOfExpression);
+            let resultOfPortion = operate(portionOfExpression);
+            arr.splice(indexOfOperation - 1, 0, resultOfPortion);
+            console.log(arr);
+          } else if (arr.includes(`*`)) {
+            let indexOfOperation = arr.indexOf("*");
+            let portionOfExpression = arr.splice(indexOfOperation - 1, 3);
+            console.log(portionOfExpression);
+            let resultOfPortion = operate(portionOfExpression);
+            arr.splice(indexOfOperation - 1, 0, resultOfPortion);
+            console.log(arr);
+          }
+        }
+      };
+
+      let operateMultipleLowPriorityOperators = function (arr) {
+        for (let i = countSumAndSubtraction(arr); i > 0; i--) {
+          if (arr.includes(`+`)) {
+            let indexOfOperation = arr.indexOf("+");
+            let portionOfExpression = arr.splice(indexOfOperation - 1, 3);
+            console.log(portionOfExpression);
+            let resultOfPortion = operate(portionOfExpression);
+            arr.splice(indexOfOperation - 1, 0, resultOfPortion);
+            console.log(arr);
+          } else if (arr.includes(`-`)) {
+            let indexOfOperation = arr.indexOf("-");
+            let portionOfExpression = arr.splice(indexOfOperation - 1, 3);
+            console.log(portionOfExpression);
+            let resultOfPortion = operate(portionOfExpression);
+            arr.splice(indexOfOperation - 1, 0, resultOfPortion);
+            console.log(arr);
+          }
+        }
+      };
+
       let equality_operator = document.querySelector(".equality_operator");
       equality_operator.addEventListener("click", function () {
         let user_input = displayOperation.value.toString().split(/([+-/*])/);
@@ -111,23 +159,16 @@
           lowPriorityOperators.some((item) => user_input.includes(item)) &&
           highPriorityOperators.some((item) => user_input.includes(item))
         ) {
-          for (let i = countDivisionAndMultiply(user_input); i > 0; i--) {
-            if (user_input.includes(`/`)) {
-              let indexOfDivision = user_input.indexOf("/");
-              let portionOfExpression = user_input.splice(
-                indexOfDivision - 1,
-                3
-              );
-              console.log(portionOfExpression);
-              let resultOfPortion = operate(portionOfExpression);
-              user_input.splice(indexOfDivision - 1, 0, resultOfPortion);
-              console.log(user_input);
-            }
-            // if (user_input[i] == `/` || user_input[i] == `*`) {
-            //   let portionOfExpression = user_input.splice(indexOf(), 3);
-            //   console.log(portionOfExpression);
-            // }
-          }
+          operateMultipleHighPriorityOperators(user_input);
+          operateMultipleLowPriorityOperators(user_input);
+        } else if (
+          !highPriorityOperators.some((item) => user_input.includes(item))
+        ) {
+          operateMultipleLowPriorityOperators(user_input);
+        } else if (
+          !lowPriorityOperators.some((item) => user_input.includes(item))
+        ) {
+          operateMultipleHighPriorityOperators(user_input);
         }
       });
     </script>
