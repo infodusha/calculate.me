@@ -1,3 +1,11 @@
+html {
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: inherit;
+}
+
 body {
   display: flex;
   flex-direction: column;
@@ -5,16 +13,17 @@ body {
   align-items: center;
 }
 
-.header {
-  box-sizing: border-box;
-}
-
 .calculator {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 8px
 }
 
 .controlPanel {
   display: flex;
+}
+
+.display {
+  width: 100%;
 }
